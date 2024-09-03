@@ -21,6 +21,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/departments/page.jsx", "app/components/EditDepartment.jsx", "app/components/DepartmentsList.jsx", "app/components/AddDepartment.jsx"],
   "exclude": ["node_modules"]
 }
