@@ -8,6 +8,15 @@ type Employee = {
     email: string;
     joinedAt: string;
     role: string;
+    phoneNumber: string,
+    address: string,
+    department: string,
+    status: string,
+    hireDate: string,
+    manager: string,
+    salary: string,
+    employmentType: string,
+    notes: string
   };
   
   type DashboardEmployeesProps = {
@@ -88,6 +97,12 @@ type Employee = {
                 </td>
                 <td className="py-10 text-center">{employee.role}</td>
                 <td className="py-10 text-center">
+                <a
+                    href={`/employees/${employee.id}`}
+                    className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
+                >
+                  More Details
+                </a>
                   <button
                     className="bg-red-500 text-white px-3 py-1 rounded"
                     onClick={() => handleDelete(employee.id)}
