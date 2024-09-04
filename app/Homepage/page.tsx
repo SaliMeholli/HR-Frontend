@@ -18,14 +18,14 @@ export default function Home() {
 
       <main className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
         <header className="w-full bg-white shadow">
-          <Menu/>
+          <Menu />
         </header>
-        <Banner/>
-        <Features/>
-        <Testimonials/>
-        <Careers/>
-        <Faq/>
-        <Footer/>
+        <Banner />
+        <Features />
+        <Testimonials />
+        <Careers />
+        <Faq />
+        <Footer />
       </main>
     </div>
   );
