@@ -87,16 +87,16 @@ type Employee = {
           <tbody className="">
             {employees.map((employee) => (
               <tr key={employee.id} className="border-b ">
-                <td className="py-10 text-center">{employee.id}</td>
-                <td className="py-10 text-center">{employee.name}</td>
-                <td className="py-10 text-center">{employee.surname}</td>
-                <td className="py-10 text-center">{employee.email}</td>
-                <td className="py-10 text-center">
+                <td className="py-10 text-center text-black">{employee.id}</td>
+                <td className="py-10 text-center text-black">{employee.name}</td>
+                <td className="py-10 text-center text-black">{employee.surname}</td>
+                <td className="py-10 text-center text-black">{employee.email}</td>
+                <td className="py-10 text-center text-black">
                   {" "}
                   {new Date(employee.joinedAt).toLocaleDateString()}
                 </td>
-                <td className="py-10 text-center">{employee.role}</td>
-                <td className="py-10 text-center">
+                <td className="py-10 text-center text-black">{employee.role}</td>
+                <td className="py-10 text-center text-black">
                 <a
                     href={`/employees/${employee.id}`}
                     className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
