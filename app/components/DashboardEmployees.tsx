@@ -52,7 +52,7 @@ type Employee = {
   };
 
   return (
-    <div className="w-full p-10">
+    <div className="w-full p-10 text-black">
       <div className="bg-white p-10 rounded-lg">
         <div className="flex justify-between mb-5">
           <div>
