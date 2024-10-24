@@ -1,69 +1,83 @@
-"use client";
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-function EditDepartment({ department, onDepartmentUpdated }) {
-  const [name, setName] = useState(department.name);
-  const [description, setDescription] = useState(department.description);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+const EditDepartment = ({ department, onUpdate, onClose }) => {
+    const [name, setName] = useState(department.name);
+    const [description, setDescription] = useState(department.description);
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-    setIsSubmitting(true);
+    useEffect(() => {
+        setName(department.name);
+        setDescription(department.description);
+    }, [department]);
 
-    try {
-      const res = await fetch(`http://localhost:4000/departments/${department.id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, description }),
-      });
+    const handleUpdate = async () => {
+        try {
+            const response = await fetch(`http://localhost:4000/departments/${department.id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name, description }),
+            });
 
-      if (!res.ok) {
-        throw new Error("Failed to update department");
-      }
+            if (response.ok) {
+                const updatedDepartment = await response.json();
+                onUpdate(updatedDepartment);
+                onClose();
+            } else {
+                console.error('Failed to update department');
+            }
+        } catch (error) {
+            console.error('Error updating department:', error);
+        }
+    };
 
-      const updatedDepartment = await res.json();
-      onDepartmentUpdated(updatedDepartment);
-    } catch (error) {
-      console.error("Error updating department:", error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  }
-
-  return (
-    <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold text-gray-800 mb-4">Edit Department</h2>
-      <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="name">Name</label>
-        <input
-          type="text"
-          id="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-          className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 bg-gray-100 text-gray-900"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="description">Description</label>
-        <textarea
-          id="description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          rows="4"
-          required
-          className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 bg-gray-100 text-gray-900"
-        ></textarea>
-      </div>
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-blue-300"
-      >
-        {isSubmitting ? 'Updating...' : 'Update Department'}
-      </button>
-    </form>
-  );
-}
+    return (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-white rounded-lg p-6 shadow-lg w-96">
+                <h2 className="text-xl font-semibold mb-4 text-gray-800">Edit Department</h2>
+                <div className="mb-4">
+                    <label className="block text-gray-700 mb-2" htmlFor="name">
+                        Name
+                    </label>
+                    <input
+                        type="text"
+                        id="name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="border border-gray-300 rounded-md p-2 w-full bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Enter department name"
+                    />
+                </div>
+                <div className="mb-4">
+                    <label className="block text-gray-700 mb-2" htmlFor="description">
+                        Description
+                    </label>
+                    <textarea
+                        id="description"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        className="border border-gray-300 rounded-md p-2 w-full bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        rows="4"
+                        placeholder="Enter department description"
+                    ></textarea>
+                </div>
+                <div className="flex justify-end">
+                    <button
+                        onClick={handleUpdate}
+                        className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 mr-2"
+                    >
+                        Update
+                    </button>
+                    <button
+                        onClick={onClose}
+                        className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-400"
+                    >
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
 
 export default EditDepartment;
