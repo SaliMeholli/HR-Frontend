@@ -1,71 +1,62 @@
-"use client";
-import { useState } from 'react';
+import React, { useState } from 'react';
 
-function AddDepartment({ onDepartmentAdded }) {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+const AddDepartment = ({ onDepartmentAdded }) => {
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-    setIsSubmitting(true);
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const newDepartment = { name, description };
+        const response = await fetch('http://localhost:4000/departments', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newDepartment),
+        });
+        if (response.ok) {
+            const addedDepartment = await response.json();
+            onDepartmentAdded(addedDepartment);
+            setName('');
+            setDescription('');
+        }
+    };
 
-    try {
-      const res = await fetch("http://localhost:4000/departments", {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, description }),
-      });
-
-      if (!res.ok) {
-        throw new Error("Failed to add department");
-      }
-
-      const newDepartment = await res.json();
-      onDepartmentAdded(newDepartment);
-      setName('');
-      setDescription('');
-    } catch (error) {
-      console.error("Error adding department:", error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  }
-
-  return (
-    <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold text-gray-800 mb-4">Add New Department</h2>
-      <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="name">Name</label>
-        <input
-          type="text"
-          id="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-          className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 bg-gray-100 text-gray-900"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="description">Description</label>
-        <textarea
-          id="description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          rows="4"
-          required
-          className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 bg-gray-100 text-gray-900"
-        ></textarea>
-      </div>
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-blue-300"
-      >
-        {isSubmitting ? 'Adding...' : 'Add Department'}
-      </button>
-    </form>
-  );
-}
+    return (
+        <form onSubmit={handleSubmit} className="mb-6">
+            <h2 className="text-2xl font-bold mb-4 text-gray-700">Create a New Department</h2>
+            <div className="mb-4">
+                <label className="block text-gray-800 mb-2" htmlFor="name">
+                    Department Name
+                </label>
+                <input
+                    type="text"
+                    id="name"
+                    placeholder="Department Name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="p-3 border border-gray-300 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-600 bg-white text-gray-800"
+                    required
+                />
+            </div>
+            <div className="mb-4">
+                <label className="block text-gray-800 mb-2" htmlFor="description">
+                    Department Description
+                </label>
+                <textarea
+                    id="description"
+                    placeholder="Department Description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    className="p-3 border border-gray-300 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-600 bg-white text-gray-800"
+                    required
+                />
+            </div>
+            <button type="submit" className="bg-blue-600 text-white px-5 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition duration-200">
+                Add Department
+            </button>
+        </form>
+    );
+};
 
 export default AddDepartment;
